@@ -6,6 +6,14 @@ const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 const DEBOUNCE_DELAY = 300;
 
+const inputFill = event => {
+  if (event.target.localName === 'img') {
+    input.value = event.target.nextElementSibling.innerText;
+  } else {
+    input.value = event.target.innerText;
+  }
+};
+
 const renderCountriesList = countries => {
   const markup = countries
     .map(({ flags, name }) => {
@@ -18,6 +26,7 @@ const renderCountriesList = countries => {
   countryList.innerHTML = markup;
   countryInfo.innerHTML = '';
 };
+
 const countryCard = ({ flags, name, capital, population, languages }) => {
   const langArr = languages.map(lang => lang.name).join(', ');
   const markup = `<p>
@@ -56,7 +65,7 @@ const fetchCountry = name => {
           (countryInfo.innerHTML = '')
         );
       if (countries.length === 1) return countryCard(countries[0]);
-
+     
       return renderCountriesList(countries);
     })
 
@@ -64,8 +73,20 @@ const fetchCountry = name => {
       console.error(error);
     });
 };
+const country = async () => {
+  const url = getUrl(input.value);
+  try {
+    const fetchCountries = await fetch(url);
+    const countries = await fetchCountries.json();
+    return countryCard(countries[0]);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 input.addEventListener(
   'input',
   debounce(event => fetchCountry(event.target.value), DEBOUNCE_DELAY)
 );
+countryList.addEventListener('click', inputFill);
+countryList.addEventListener('click', country);
