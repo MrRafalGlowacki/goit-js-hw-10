@@ -29,7 +29,7 @@ const renderCountriesList = countries => {
 
 const countryCard = ({ flags, name, capital, population, languages }) => {
   const langArr = languages.map(lang => lang.name).join(', ');
-  formatedPopulation = population
+  const formatedPopulation = population
   .toString().replaceAll(/[^\d]/g, '').replaceAll(/(\d)(?=(?:\d\d\d)+$)/g, '$1\u0020').trim();
   const markup = `<p class="country__name">
   <img src="${flags.svg}" alt="${name} flag" height="30px"/>
