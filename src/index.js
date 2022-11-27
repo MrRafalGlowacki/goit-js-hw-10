@@ -2,12 +2,12 @@ import './css/styles.css';
 import debounce from 'lodash.debounce';
 import Notiflix from 'notiflix';
 const input = document.querySelector('#search-box');
-const countryList = document.querySelector('.country-list');
-const countryInfo = document.querySelector('.country-info');
+const countryList = document.querySelector('.country__list');
+const countryInfo = document.querySelector('.country__info');
 const DEBOUNCE_DELAY = 300;
 
 const inputFill = event => {
-  if (event.target.localName === 'img') {
+    if (event.target.localName === 'img') {
     input.value = event.target.nextElementSibling.innerText;
   } else {
     input.value = event.target.innerText;
@@ -18,8 +18,8 @@ const renderCountriesList = countries => {
   const markup = countries
     .map(({ flags, name }) => {
       return `<li class="country__container">
-      <img src="${flags.svg}" alt="${name} flag" width="50px" />
-         <span class="country__name">${name}</span></li>`;
+      <img src="${flags.svg}" alt="${name} flag" height="30px" width="50px" />
+         <span class="country__name-list">${name}</span></li>`;
     })
     .join('');
 
@@ -29,12 +29,14 @@ const renderCountriesList = countries => {
 
 const countryCard = ({ flags, name, capital, population, languages }) => {
   const langArr = languages.map(lang => lang.name).join(', ');
-  const markup = `<p>
-  <img src="${flags.svg}" alt="${name} flag" width="50px" />
+  formatedPopulation = population
+  .toString().replaceAll(/[^\d]/g, '').replaceAll(/(\d)(?=(?:\d\d\d)+$)/g, '$1\u0020').trim();
+  const markup = `<p class="country__name">
+  <img src="${flags.svg}" alt="${name} flag" height="30px"/>
       ${name}</p>
-      <p>Capital: ${capital}</p>
-      <p>Population: ${population}</p>
-      <p>Languages: ${langArr}</p>`;
+      <p class="country__list-item">Capital: <span class="country__list-resp">${capital}</span></p>
+      <p class="country__list-item">Population: <span class="country__list-resp">${formatedPopulation}</span></p>
+      <p class="country__list-item">Languages: <span class="country__list-resp">${langArr}</span></p>`;
   countryInfo.innerHTML = markup;
   countryList.innerHTML = '';
 };
@@ -65,7 +67,7 @@ const fetchCountry = name => {
           (countryInfo.innerHTML = '')
         );
       if (countries.length === 1) return countryCard(countries[0]);
-     
+
       return renderCountriesList(countries);
     })
 
