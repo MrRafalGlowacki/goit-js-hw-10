@@ -50,11 +50,12 @@ const countryCard = ({ flags, name, capital, population, languages }) => {
   countryInfo.innerHTML = markup;
   countryList.innerHTML = '';
 };
-const getUrl = name =>
-  `https://restcountries.com/v2/name/${name}?fields=name,capital,population,flags,languages`;
+
+const getFullNameUrl = name =>
+  `https://restcountries.com/v2/name/${name}?fullText=true;fields=name,capital,population,flags,languages`;
 
 const country = async () => {
-  const url = getUrl(input.value);
+  const url = getFullNameUrl(input.value);
   try {
     const fetchCountries = await fetch(url);
     const countries = await fetchCountries.json();
@@ -71,4 +72,4 @@ input.addEventListener(
 countryList.addEventListener('click', inputFill);
 countryList.addEventListener('click', country);
 
-export { countryInfo, countryList, countryCard, renderCountriesList, getUrl };
+export { countryInfo, countryList, countryCard, renderCountriesList };

@@ -4,9 +4,10 @@ import {
   countryList,
   countryCard,
   renderCountriesList,
-  getUrl,
 } from './index';
 const letters = /^[A-Za-z]+$/;
+const getUrl = name =>
+  `https://restcountries.com/v2/name/${name}?fields=name,capital,population,flags,languages`;
 export const fetchCountry = name => {
   const parsedName = name.trim();
   if (parsedName.length === 0) return;
